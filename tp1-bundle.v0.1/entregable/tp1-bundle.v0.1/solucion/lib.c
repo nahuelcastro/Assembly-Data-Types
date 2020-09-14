@@ -196,6 +196,7 @@ tree_t* treeNew(type_t typeKey, type_t typeData, int duplicate) {
     return t;
 }
 list_t* treeGet(tree_t* tree, void* key) {
+	//completar
     return 0;
 }
 void treeRemove(tree_t* tree, void* key, void* data) {
