@@ -69,6 +69,30 @@ void intPrint(int32_t* a, FILE *pFile){
     fprintf(pFile, "%i", *a);
 }
 
+/** Float **/
+
+int32_t floatCmp(float* a, float* b);
+
+float* floatClone(float* a);
+
+void floatDelete(float* a);
+
+void floatPrint(float* a, FILE *pFile);
+
+/* String */
+
+uint32_t strLen(char* a);
+
+int32_t strCmp(char* a, char* b);
+
+char* strClone(char* a);
+
+void strDelete(char* a);
+
+void strPrint(char* a, FILE *pFile);
+
+
+
 /** Document **/
 
 document_t* docNew(int32_t size, ... ){
@@ -141,6 +165,7 @@ void listAddLast(list_t* l, void* data){
     l->last = n;
 }
 void listRemove(list_t* l, void* data){
+    //completar
 }
 list_t* listClone(list_t* l) {
     funcClone_t* fn = getCloneFunction(l->type);
@@ -200,6 +225,7 @@ list_t* treeGet(tree_t* tree, void* key) {
     return 0;
 }
 void treeRemove(tree_t* tree, void* key, void* data) {
+    //completar
 }
 void treeDeleteAux(tree_t* tree, treeNode_t** node) {
     treeNode_t* nt = *node;
