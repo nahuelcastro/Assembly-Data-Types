@@ -2,11 +2,10 @@
 ;dudas:
 ;como se usa la seccion . data, por el tema de que hay muchas funciones
 ;hay funciones que no las marca en la consigna, pero aca aparecen para hacerlas
-;ver si entendimos bien el ejercicio 2
 ;duda de las referencias
 ;preguntar que onda con las db y esas cosas
 ;en que tamaño se realizan las cuentas en assembler
-;ver bien como funciona el free en las funciones que son de clonar
+
 
 
 
@@ -49,16 +48,16 @@ floatCmp:
 
   movss xmm1, [rsi]
   comiss xmm1, [rdi]
-  je iguales            ; ver como carajo son los saltos
-  jl menor
+  je .iguales            ; ver como carajo son los saltos
+  jl .menor
   mov  eax, -1
   jmp fin
-iguales:
+.iguales:
   mov eax, 0       ; VA DD?????????????? o algun otro, o no hace falta
-  jmp fin
-menor:
+  jmp .fin
+.menor:
   mov  eax, 1
-fin:
+.fin:
   pop rbp
   ret
 
@@ -88,8 +87,26 @@ floatPrint:
 
 strClone:
 ret
+
 strLen:
-ret
+; char* a -> RDI
+; Stack frame (Armado)
+  push rbp
+  mov rbp, rsp
+
+  xor rax, rax  ; limpio el eax
+.ciclo:
+  cmp byte [rdi], 0  ;veo si termina el string
+  je .fin
+  inc rax       ;
+  inc rdi       ; avanzo la posicion en el string
+  jne .ciclo
+.fin:
+  ; Stack Frame (Limpieza)
+  pop rbp
+  ret
+
+
 strCmp:
 ret
 strDelete:
