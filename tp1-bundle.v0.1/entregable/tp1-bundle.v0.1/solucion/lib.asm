@@ -86,7 +86,35 @@ floatPrint:
 ;*** String ***
 
 strClone:
-ret
+  ;char* a -> RDI
+  ; armo stackframe
+  push rbp
+  mov rbp,rsp
+
+  mov r13, rdi  ;guardo la posicion donde arranca mi parametro
+  ; ya tengo en rdi donde arranca mi string para pasarselo a strLen
+  call strLen  ; devuelve en rax el la cantidad de bytes que tengo que reservar
+  mov rdi, rax ; lo paso a rdi para despues llamar a malloc
+  call malloc ;tengo en rax el puntero que apunta al arranque de la memoria resevada
+  mov r8, rax ; no quiero modificar rax asi ya lo tengo apuntando al arranque del string que deveuelvo
+.ciclo:
+  cmp byte [r13], 0 ; l ; NOOO FUNCA
+  je .fin
+  mov r9B, [r13] ;r13 apunta al arranque del string que recibo como parametro
+  mov [rax], r9B
+  inc r13
+  inc rax;
+  jmp .ciclo
+
+.fin:
+  mov rax, r8;
+  pop  rbp
+  ret
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+
 
 strLen:
 ; char* a -> RDI
@@ -105,10 +133,44 @@ strLen:
   ; Stack Frame (Limpieza)
   pop rbp
   ret
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 
 strCmp:
-ret
+  ;char* a -> RDI
+  ;char* b -> RSI
+
+  ;armo Stackframe
+  push rbp
+  mov rbp,rsp
+
+.ciclo:
+  mov r8b, [rdi]  ; copio el char al que apunte rdi de "a"
+  mov r9b, [rsi]  ; copio el char al que apunte rsi de "b"
+  cmp r8b, r9b    ; cmp los char
+  jl .menor
+  jg .mayor
+  cmp r8b, 0      ; Si alguno es 0, entonces fin
+  je .iguales
+  inc rdi         ; inc rdi para que apunte al siguiente char
+  inc rsi         ; inc rsi para que apunte al siguiente char
+  jmp .ciclo
+.menor:
+  mov eax, 1
+  jmp .fin
+.mayor:
+  mov eax, -1
+  jmp .fin
+.iguales:
+  mov rax, 0
+.fin:
+  pop rbp
+  ret
+
+
+
+
 strDelete:
 ret
 strPrint:

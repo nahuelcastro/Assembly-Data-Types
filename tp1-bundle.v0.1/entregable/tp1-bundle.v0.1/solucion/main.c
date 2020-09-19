@@ -25,12 +25,24 @@ extern uint32_t strLen(char* a)
 void floatCmpTest();
 void strLen();
 
+extern uint32_t strLen(char* a);
+void strLenTest();
+
+extern char* strClone(char* a);
+void strCloneTest();
+
+extern void strDelete(char* a);
+void strDeleteTest();
+
+
 int main (void){
 
     // Team
     floatCmpTest();
 
+    strCloneTest();
     strLen();
+    strCmpTest();
 
 
     // catedra
@@ -41,6 +53,8 @@ int main (void){
     fclose(pfile);
     return 0;
 }
+
+
 
 void floatCmpTest(){
 
@@ -82,20 +96,72 @@ void floatCmpTest(){
 
 }
 
-void strLen(){
-    char hola[4] = {'h','o','l','a'};
-    char vacio[0] = {};
-    char largo[10] = {'h','o','l','a',' ','m','u','n','d','o' }
+
+void strCloneTest(){
+
+    char holaMundo[] = {"hola mundo"};
+    char buenDia[] = {"buen dia"};
+    char aprobamos[] = {"Dale que aprobamos el TP 0$&/|"};
+
+    //uint32_t resHolaMundo = strClone2(holaMundo);
+    char* resHolaMundo = strClone(holaMundo);
+    char* resBuenDia   = strClone(buenDia);
+    char* resAprobamos = strClone(aprobamos);
+
+    printf("hola mundo == %s\n", resHolaMundo );
+    printf("buen dia == %s\n", resBuenDia );
+    printf("Dale que aprobamos el TP 0$&/| == %s\n", resAprobamos );
+
+}
+
+
+void strLenTest(){
+    char hola[] = {"hola"};
+    char vacio[] = {};
+    char largo[] = {"hola mundo"};
 
     uint32_t resHola = strLen(hola);
     uint32_t resVacio = strLen(vacio);
     uint32_t resLargo = strLen(largo);
 
+
     printf("hola: %d\n",resHola);
     printf("vacio: %d\n",resVacio);
     printf("hola mundo: %d\n",resLargo);
-
 }
+
+
+void strCmpTest(){
+    char hola[] = {"hola"};
+    char chau[] = {"chau"};
+    char vacio[] = {};
+    char holax[] = {"holax"};
+    char aola[] = {"aola"};
+
+    uint32_t res = strCmp(hola,chau);
+    uint32_t resIgual = strCmp(hola,hola);
+    uint32_t resVacio = strCmp(vacio,hola);
+    uint32_t resVaciox2 = strCmp(vacio,vacio);
+    uint32_t resHolax = strCmp(hola,holax);
+    uint32_t resAola = strCmp(hola,aola);
+
+    printf("-1?: %d\n",res);
+    printf("0?: %d\n",resIgual);
+    printf("1?: %d\n",resVacio);
+    printf("0?: %d\n",resVaciox2);
+    printf("1?: %d\n",resHolax);
+    printf("-1?: %d\n",resAola);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 /*
