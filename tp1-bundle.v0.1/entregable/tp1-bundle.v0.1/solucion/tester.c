@@ -137,7 +137,7 @@ void test_tree(FILE *pfile) {
     float floatA;
     list_t* l;
     fprintf(pfile,"===== Tree\n");
-    
+
     t = treeNew(TypeInt, TypeString, 1);
     treePrint(t, pfile); fprintf(pfile,"\n");
     treeDelete(t);

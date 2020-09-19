@@ -82,6 +82,7 @@ void floatPrint(float* a, FILE *pFile);
 /* String */
 
 uint32_t strLen(char* a);
+// Retorna la cantidad de caracteres distintos de cero del string pasado por parámetro
 
 int32_t strCmp(char* a, char* b);
 

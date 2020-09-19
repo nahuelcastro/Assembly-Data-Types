@@ -26,7 +26,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo " "
-echo "**Corriendo diferencias con la catedra"
+echo "**Corriendo diferencias con la catedra" 
 
 DIFFER="diff -d"
 ERRORDIFF=0

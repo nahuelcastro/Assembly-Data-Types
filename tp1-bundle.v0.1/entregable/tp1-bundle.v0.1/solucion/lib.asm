@@ -11,6 +11,14 @@
 
 section .data
 
+; strPrint
+modo_fopen: db "w", 10
+string_format: db "%s", 10, 0
+string_NULL: db "NULL",10,0
+
+
+
+
 section .text
 
 global floatCmp
@@ -51,7 +59,7 @@ floatCmp:
   je .iguales            ; ver como carajo son los saltos
   jl .menor
   mov  eax, -1
-  jmp fin
+  jmp .fin
 .iguales:
   mov eax, 0       ; VA DD?????????????? o algun otro, o no hace falta
   jmp .fin
@@ -172,14 +180,137 @@ strCmp:
 
 
 strDelete:
-ret
-strPrint:
-ret
+  call free
+  ret
+
+
+
+
+
+  ;extern fopen
+  ;extern fclose
+  extern fprintf
+
+  strPrint:
+  ; char* a -> RDI
+  ; FILE* pFile -> RSI
+
+  ; Stack frame (Armado)
+    push rbp
+    mov rbp, rsp
+
+    mov r8,rdi    ; R8 aux con el char* a
+    mov rdi,rsi
+    mov r9, rsi
+    ;mov rsi, modo_fopen
+
+    ; ; fopen toma rdi: FILE, rsi: modo_fopen
+    ; call fopen
+    mov rsi, string_format
+    cmp byte [r8],0
+    je .NULL
+    mov rdx,r8
+    jmp .fprintf
+
+  .NULL:
+    mov rdx, string_NULL
+
+  .fprintf:
+    ;fprintf(fp, "%s", r8);
+    ; rdi: FILE, rsi: string_format, rdx: char* a (R8)
+    call fprintf
+    mov rdi,r9
+    ;call fclose ; RDI: FILE ; NO ANDA, preguntar si va aca o en C
+
+  .fin:
+    ; Stack Frame (Limpieza)
+    pop rbp
+    ret
+
+
+
+
 
 ;*** Document ***
+; document_t* docClone(document_t* a)
+; Genera una copia del documento junto con todos sus datos. Para esto, debe llamar a las funciones
+; clone de cada uno de los tipos de los datos que integran el documento.
+; posibles cosos: none, int, float, string, document
+
+extern getCloneFunction
+
+%define offset_type 0
+%define offset_data_ptr 8
+%define offset_doc_elem 8
+%define bytesBlockElement 16
 
 docClone:
-ret
+  ; document_t* a -> RDI
+  ;armo stackframe
+  push rbp
+  mov rbp,rsp
+
+  %define document_original_ptr rdi
+  %define document_size [document_original_ptr]
+
+  ; creamos arreglo
+  mov rax , document_size ; ver si anda, sino seria mov R_aux [document_size] y luego mov rdi, R_aux * 16
+  mov r8, bytesBlockElement
+  mul r8 ; mul  cx        ; supuestamente hace rax = r8 * rax
+  mov rdi, rax ; paso el document_size * 16 a rdi para el malloc
+  call malloc
+  ;rax: puntero al vector nuevo de document_elementos
+  %define document_elem_values rax
+
+  ;armar el document_t nuevo
+  mov rdi, bytesBlockElement
+  call malloc ; returna rax:
+  %define document_clone_ptr rax
+
+  ; Ya tenemos toda la memoria solicitada
+  ; volcado de data a document:
+  mov document_clone_ptr, document_size
+  mov [document_clone_ptr + 8], document_elem_values ; ver si anda el + 8
+
+  ; volcado de data a los document elem:
+  xor rcx, rcx ; RCX contador del vector (la "i" de nuestro querido for)
+  mov r9, document_clone_ptr  ; CUIDADO A VER SI VA CON O SIN [], ahora creeomos que va sin, pero todo puede cambiar
+.ciclo:
+
+  cmp rcx, document_size ; ACA QUEREMOS COMPARAR LOS 4 BYTES DE RCX con document_size
+  je .fin
+
+  ;me paro en el type_t del r9 que estamos viendo
+  mov rdi, r9 + offset_type    ; VER SI ES VALIDA ESTA NOTACION, offset_type es 0, pero tenemos estilo
+  call getCloneFunction;
+  ; rax devuelve el puntero a la funcion correspondiente
+  ; posiciono rdi en el puntero al dato del r9 correspondiente
+  mov rdi, [document_original_ptr + offset_data_ptr]
+  call rax    ; ver si vale
+  ; ahora en rax tenemos el puntero al clone
+  ; pongo ese puntero en el data elem correspondiente
+  mov [r9 + offset_doc_elem], rax
+
+  ; avanzar r9
+  add r9, bytesBlockElement ; tambien puede ser con mov
+  inc rcx
+  jmp .ciclo
+
+  ; devolver el documeto nuevo
+  mov rax, document_clone_ptr
+
+.fin:
+
+  pop rbp
+  ret       ; DESPUES PROBAR DE """DEBUGGEAR""" con fprint viendo que hay en cada coso
+            ; call printf
+
+
+
+
+
+
+
 docDelete:
 ret
 

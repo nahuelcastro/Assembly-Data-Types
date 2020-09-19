@@ -20,29 +20,31 @@ void test_document(FILE *pfile){
 }
 
 extern int32_t floatCmp(float* a, float* b);
-extern uint32_t strLen(char* a)
-
 void floatCmpTest();
-void strLen();
 
 extern uint32_t strLen(char* a);
 void strLenTest();
 
 extern char* strClone(char* a);
-void strCloneTest();
+//void strCloneTest();
+
+extern int32_t strCmp(char* a, char* b);
+void strCmpTest();
 
 extern void strDelete(char* a);
 void strDeleteTest();
 
 
+
+
 int main (void){
 
     // Team
-    floatCmpTest();
-
-    strCloneTest();
-    strLen();
-    strCmpTest();
+     //floatCmpTest();
+    //
+    //strCloneTest(); // ver caso vacio
+     //strLenTest();
+     //strCmpTest();
 
 
     // catedra
@@ -55,62 +57,66 @@ int main (void){
 }
 
 
-
-void floatCmpTest(){
-
-  // TEST RAPIDO floatCmp
-    float* pfa = malloc(4);
-    *pfa = 12.3;
-    float* pfb = malloc(4);
-    *pfb = 12.3;
-
-    int32_t res = floatCmp(pfa,pfb);
-    printf("dio 0? %d\n",res);
-
-
-    float* pfa1 = malloc(4);
-    *pfa1 = 15.1;
-    float* pfb1 = malloc(4);
-    *pfb1 = 12.3;
-
-    int32_t res1 = floatCmp(pfa1,pfb1);
-    printf("dio -1? %d\n",res1);
-
-
-    float* pfa2 = malloc(4);
-    *pfa2 = 12.3;
-    float* pfb2 = malloc(4);
-    *pfb2 = 11.3;
-
-    int32_t res2 = floatCmp(pfa2,pfb2);
-    printf("dio 1? %d\n",res2);
-
-    free(pfa);
-    free(pfb);
-    free(pfa1);
-    free(pfb1);
-    free(pfa2);
-    free(pfb2);
+// NO SE PORQUE NO COMPILA BIEN ESTE
+// void floatCmpTest(){
+//
+//   // TEST RAPIDO floatCmp
+//     float* pfa = malloc(4);
+//     *pfa = 12.3;
+//     float* pfb = malloc(4);
+//     *pfb = 12.3;
+//
+//     int32_t res = floatCmp(pfa,pfb);
+//     printf("dio 0? %d\n",res);
+//
+//
+//     float* pfa1 = malloc(4);
+//     *pfa1 = 15.1;
+//     float* pfb1 = malloc(4);
+//     *pfb1 = 12.3;
+//
+//     int32_t res1 = floatCmp(pfa1,pfb1);
+//     printf("dio -1? %d\n",res1);
+//
+//
+//     float* pfa2 = malloc(4);
+//     *pfa2 = 12.3;
+//     float* pfb2 = malloc(4);
+//     *pfb2 = 11.3;
+//
+//     int32_t res2 = floatCmp(pfa2,pfb2);
+//     printf("dio 1? %d\n",res2);
+//
+//     free(pfa);
+//     free(pfb);
+//     free(pfa1);
+//     free(pfb1);
+//     free(pfa2);
+//     free(pfb2);
 
   // FIN TEST RAPIDO floatCmp
 
-}
+//}
 
 
 void strCloneTest(){
 
     char holaMundo[] = {"hola mundo"};
-    char buenDia[] = {"buen dia"};
-    char aprobamos[] = {"Dale que aprobamos el TP 0$&/|"};
+    // char buenDia[] = {"buen dia"};
+    // char aprobamos[] = {"Dale que aprobamos el TP 0$&/|"};
 
     //uint32_t resHolaMundo = strClone2(holaMundo);
     char* resHolaMundo = strClone(holaMundo);
-    char* resBuenDia   = strClone(buenDia);
-    char* resAprobamos = strClone(aprobamos);
+    // char* resBuenDia   = strClone(buenDia);
+    // char* resAprobamos = strClone(aprobamos);
 
     printf("hola mundo == %s\n", resHolaMundo );
-    printf("buen dia == %s\n", resBuenDia );
-    printf("Dale que aprobamos el TP 0$&/| == %s\n", resAprobamos );
+    // printf("buen dia == %s\n", resBuenDia );
+    // printf("Dale que aprobamos el TP 0$&/| == %s\n", resAprobamos );
+
+    free(resHolaMundo);
+    // free(resBuenDia);
+    // free(resAprobamos);
 
 }
 
@@ -154,6 +160,19 @@ void strCmpTest(){
 }
 
 
+void strPrintTest(){
+    char interesante[] = {"Buenas noches America anda todo, dale que se aprueba ORGA 2 :P"};
+    char vacio[] = {};
+
+    FILE* fp_interesante = fopen("PruebaORGA2.txt", "w");
+    FILE* fp_vacio = fopen("vacio.txt", "w");
+
+    strPrint(interesante, fp_interesante );
+    strPrint(vacio, fp_vacio );
+
+    fclose(fp_interesante);
+    fclose(fp_vacio);
+}
 
 
 
