@@ -1,1 +1,1 @@
-# TP1-orga2
+This group project consists of the implementation of different types of data using assembly language of the Intel x86-64 architecture, carried out for the subject "Computer Organization II" at the University of Buenos Aires.
